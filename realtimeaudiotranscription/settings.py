@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-caj!h^mg=1-n!m+@txd@c4u8a=3tczvalr2dg3h9crdus)668(
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh','localhost','127.0.0.1']
 
 
 # Application definition
@@ -87,16 +87,14 @@ WSGI_APPLICATION = 'realtimeaudiotranscription.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get("DB_NAME"),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':os.environ.get("DB_NAME"),
         'USER': os.environ.get("DB_USER"),
         'PASSWORD': os.environ.get("DB_PASSWORD"),
         'HOST': os.environ.get("DB_HOST"),
         'PORT': os.environ.get("DB_PORT"),
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

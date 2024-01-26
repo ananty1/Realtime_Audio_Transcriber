@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<style>
+    .btn {
+        margin: 2px auto;
+        border: 6px solid blue;
+        border-radius: 8px;
+        padding: 8px 21px;
+        text-align: center;
+        justify-content: center;
+        background-color: blue;
+        cursor: pointer;
+    }
+
+    .btn-danger {
+        border: 6px solid red;
+        background-color: red;
+    }
+
+    .btn-info {
+        border: 6px solid lightblue;
+        background-color: lightblue;
+    }
+
+    #transcript {
+        height: 300px;
+        width: 80%;
+    }
+</style>
+
+<head>
+    <title>RealTimeAudioTranscriber</title>
+</head>
+
+<body>
+    <h1>Transcribe Audio With Django</h1>
+    <p id="status">Connection status will go here</p>
+    <textarea id="transcript"></textarea>
+
+    <div>
+        <p id="stopwatch">1:30</p>
+    </div>
+
+    <div>
+        <button class="btn btn-primary" onclick="askpermission()"> Record </button>
+        <button class="btn btn-danger" onclick="closeConnection()"> Stop </button>
+        <button class="btn btn-info" onclick="clearTranscript()"> Clear Text </button>
+    </div>
+
+
+
+    <script>
+        let mediaRecorder;
+        let socket;
+        let stopwatchInterval;
+        let remainingTime = 90;
+
+        const startStopwatch = () => {
+            countdownInterval = setInterval(() => {
+                remainingTime -= 1;
+                if (remainingTime >= 0) {
+                    updateStopwatch();
+                } else {
+                    closeConnection();
+                }
+            }, 1000);
+        };
+
+        const updateStopwatch = () => {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            document.querySelector('#stopwatch').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        };
+
+        const stopStopwatch = () => {
+            clearInterval(countdownInterval);
+        };
+
+        const resetStopwatch = () => {
+            remainingTime = 90;
+            updateStopwatch();
+        };
+
+
+        const askpermission = () => {
+            console.log("Yeah we started");
+
+            // Close the existing WebSocket connection if it exists
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.close();
+            }
+
+            // Stop the existing MediaRecorder if it exists
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+
+            navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+                if (!MediaRecorder.isTypeSupported('audio/webm'))
+                    return alert('Browser not supported')
+
+                mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'audio/webm',
+                });
+
+                socket = new WebSocket('ws://localhost:8000/listen');
+
+                socket.onopen = () => {
+                    document.querySelector('#status').textContent = 'Connected';
+                    startStopwatch();
+
+                    mediaRecorder.addEventListener('dataavailable', async (event) => {
+                        if (event.data.size > 0 && socket.readyState === WebSocket.OPEN) {
+                            socket.send(event.data);
+                        }
+                    });
+
+                    mediaRecorder.start(250);
+
+                    setTimeout(() => {
+                        closeConnection();
+                    }, 90000);  // 90 seconds
+                };
+
+                socket.onmessage = (message) => {
+                    const received = message.data;
+                    if (received) {
+                        console.log(received);
+                        document.querySelector('#transcript').textContent += ' ' + received;
+                    }
+                };
+
+                socket.onclose = () => {
+                    console.log({ event: 'onclose' });
+                    stopStopwatch();
+                };
+
+                socket.onerror = (error) => {
+                    console.log({ event: 'onerror', error });
+                };
+            });
+        };
+
+        const clearTranscript = () => {
+            document.querySelector('#transcript').textContent = '';
+        };
+
+        const closeConnection = () => {
+            // Close the existing WebSocket connection if it exists
+            try {
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    socket.close();
+                }
+            } catch {
+                console.log("group_discard_Error");
+            }
+            // Stop the existing MediaRecorder if it exists
+            try {
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+                }
+            } catch (error) {
+                console.log("MediaREcording Error");
+            }
+
+            document.querySelector('#stopwatch').textContent = `${1}:${3}${0}`;
+            resetStopwatch();
+            document.querySelector('#status').textContent = 'DisConnected ,Press Record to transcribe';
+        };
+
+    </script>
+
+</body>
+
+</html>

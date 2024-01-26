@@ -2,4 +2,7 @@ from django.shortcuts import render,HttpResponse
 
 # Create your views here.
 def index(request):
-    return HttpResponse("this is homePage")
+    return render(request,'transcriber_webpage/home.html')
+
+def test(request):
+    return HttpResponse("Yeah test is working")

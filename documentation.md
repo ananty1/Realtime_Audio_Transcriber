@@ -1,125 +1,121 @@
-ChatGPT/LLM Integration Documentation:
-Prompt 1: Application Overview
+# Documentation - Django Intern Evaluation, applyin.co
 
-Prompt: "Describe the Real-Time Audio Transcription Webpage application."
-Output: Provided an overview of the application's functionality, including the record button, Whisper API integration, and user interface design.
-Prompt 2: Error Handling
+## Performance Metrics
+- Average Transcription Latency: 0.84 seconds
+- Average Accuracy: 0.89
 
-Prompt: "How can robust error handling be implemented for poor audio quality or network interruptions?"
-Output: Suggested using try...except blocks, providing clear user feedback for poor audio quality or network interruptions.
-Prompt 3: Performance Metrics
+## Limitations of Product
+1. Scalability of the webpage is not checked.
+2. How the webpage responds to multiple users concurrently is not tested.
+3. Implementing groups for real-life usage.
+4. Challenge: Making it work on Vercel, a static website deployer, and WebSocket deployment challenges.
 
-Prompt: "What key performance metrics should be measured and reported, and how can they be calculated?"
-Output: Advised measuring transcription latency and accuracy, with suggestions on using timestamps for latency and evaluating text with Levenshtein distance for accuracy.
-Prompt 4: WebSocket Connection for Vercel
+## Challenges and Learnings
+1. **Django Realtime Communication:**
+   - Technologies: Django Channels, ASGI, Consumer, WebSocket.
+2. **Realtime Transcription with Deepgram API:**
+   - Technology: Deepgram API integration for real-time transcription, accuracy, and latency calculation.
+3. **Deploying Django on Vercel:**
+   - Approach: Vercel - Django Implementation.
 
-Prompt: "How should the WebSocket connection be updated when deploying on Vercel?"
-Output: Recommended replacing the WebSocket URL with wss://${window.location.hostname}/listen to dynamically adapt to the host, considering Vercel's deployment.
-Prompt 5: Closing WebSocket Connection
+## ChatGPT/LLM Integration Documentation:
 
-Prompt: "How to automatically close the WebSocket connection after 90 seconds and restart it when the user clicks the record button?"
-Output: Proposed using a timer or setTimeout function to close the connection after 90 seconds, with the initiation of a new connection on the record button click.
-Prompt 6: Handling Rate Limit Error
+### Application Overview
+**Prompt:** Describe the Real-Time Audio Transcription Webpage application.
+**Output:** Provided an overview of the application's functionality, including the record button, Whisper API integration, and user interface design.
 
-Prompt: "How to handle the 'RateLimitError' from the OpenAI Whisper API?"
-Output: Advised implementing try...except blocks to catch the 'RateLimitError' and providing user feedback to check the plan and billing details.
-Prompt 7: WebSocket Connection URL in Code
+### Recorder
+**Prompt:** Implement views for recording, transcribing, and displaying results.
+Implement Templates:
+Create HTML templates for the frontend, including a button for recording and a text box for displaying transcriptions.
+Use JavaScript:
 
-Prompt: "What should the WebSocket connection URL be in the frontend code when using Vercel?"
-Output: Provided the corrected code using wss protocol and ${window.location.hostname} to dynamically set the host.
-Prompt 8: Django Channels WebSocket Connection
+**Output:** 
 
-Prompt: "How to configure WebSocket connection in Django Channels consumer?"
-Output: Shared a general structure for connecting to Deepgram using Django Channels, including connection, disconnection, and receiving functions.
-Prompt 9: Connecting to Deepgram with Django Channels
+```bash
+    #!/bin/bash
 
-Prompt: "How to connect to Deepgram using Django Channels and handle WebSocket events?"
-Output: Presented a code snippet for connecting to Deepgram, handling CLOSE and TRANSCRIPT_RECEIVED events, and raising exceptions for connection issues.
-Prompt 10: LLM Code Refinement
+    cat <<EOL
+    # Real-Time Audio Transcription Webpage
 
-Prompt: "Use ChatGPT to refine the provided Python code for the Real-Time Audio Transcription Webpage."
-Output: Revised the code for clarity and conciseness, ensuring adherence to best practices.
+    ## Setup JavaScript for Audio Recording and Whisper API Integration
 
-Prompt for Code Generation:
+    1. Open the HTML file where you want to implement audio recording and Whisper API integration (e.g., transcription_app/templates/transcription_app/record_and_transcribe.html).
 
-Task: Write Python code to send real-time audio transcriptions using Deepgram API through Django Channels and WebSockets. Include handling for transcript and accuracy.
-Subtasks:
-Connect to Deepgram API using provided credentials.
-Implement WebSocket consumer to handle real-time transcription events.
-Extract transcript and accuracy from received data and send them through WebSocket.
-Ensure proper connection handling and message reception.
-Prompt for WebSocket Transcript Handling:
+    2. Add the following script to handle audio recording using Recorder.js. Make sure to adjust the code based on the Whisper API documentation.
 
-Task: Modify WebSocket consumer to send both transcript and accuracy to the client.
-Subtasks:
-Update get_transcript method to include accuracy in the response.
-Convert the response dictionary to a JSON string before sending it through the WebSocket.
-Prompt for JavaScript Handling:
+    ```html
+    <!-- transcription_app/templates/transcription_app/record_and_transcribe.html -->
+    <!-- ... (previous HTML code) ... -->
 
-Task: Update JavaScript code to handle the new format of WebSocket messages.
-Subtasks:
-Parse received JSON string using JSON.parse.
-Adjust console.log and textContent to correctly access transcript information.
-Prompt for Transcription Accuracy Calculation:
+    <script>
+        // Implement JavaScript for audio recording and Whisper API integration here
+        // Adjust the code based on the Whisper API documentation
 
-Task: Provide a Python function to calculate transcription accuracy based on Deepgram API confidence scores.
-Subtasks:
-Define a confidence threshold for considering a word correctly transcribed.
-Calculate accuracy based on correct words and total words.
-Prompt for Transcription Latency Calculation:
+        // Example: Basic audio recording using Recorder.js
+        var recorder;
 
-Task: Provide a Python function to calculate transcription latency based on Deepgram API duration field.
-Subtasks:
-Extract duration field from the transcription result.
-Return the duration as the transcription latency in seconds.
-Prompt for Example Usage of Accuracy and Latency Functions:
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                recorder = new Recorder(stream);
+            })
+            .catch(function (err) {
+                console.log('Error accessing microphone:', err);
+            });
 
-Task: Demonstrate the usage of accuracy and latency functions on a sample transcription result.
-Subtasks:
-Create a sample transcription result with confidence scores and duration.
-Call the accuracy and latency functions with the sample result.
-Print the results for accuracy and latency.
-Prompt for Review:
+        function startRecording() {
+            recorder && recorder.record();
+        }
 
-Task: Review and refine responses to ensure clarity and correctness.
-Subtasks:
-Use ChatGPT to refine the language and structure of the provided information.
-Check for completeness and correctness in the code examples and explanations.
+        function stopRecording() {
+            recorder && recorder.stop();
+            // Handle the audio data and send it to the server for transcription
+        }
+    </script>
 
-Prompt: "Can you help me calculate transcription latency and transcription accuracy using the Deepgram API? Explain each field in the API response."
+``````
 
-Output: Provided detailed explanation and computation logic for transcription latency and accuracy based on a Deepgram API response.
-Prompt: "Can you modify the Python code for a WebSocket consumer in Django to calculate transcription latency and integrate it with Deepgram API?"
+### Error Handling
+**Prompt:** How can robust error handling be implemented for poor audio quality or network interruptions?
+**Output:** Suggested using try...except blocks, providing clear user feedback for poor audio quality or network interruptions.
 
-Output: Provided modified Python code to calculate transcription latency and accuracy in a Django WebSocket consumer using the Deepgram API.
-Prompt: "Can you help me improve the HTML and CSS styling for a real-time audio transcription web page?"
+### Performance Metrics
+**Prompt:** What key performance metrics should be measured and reported, and how can they be calculated?
+**Output:** Advised measuring transcription latency and accuracy, with suggestions on using timestamps for latency and evaluating text with Levenshtein distance for accuracy.
 
-Output: Revised HTML and CSS to enhance the visual appearance of the web page, improving structure, layout, and styling.
-Prompt: "Include functionality for calculating average latency and accuracy in the real-time transcription web page."
+### Closing WebSocket Connection
+**Prompt:** How to automatically close the WebSocket connection after 90 seconds and restart it when the user clicks the record button?
+**Output:** Proposed using a timer or `setTimeout` function to close the connection after 90 seconds, with the initiation of a new connection on the record button click.
 
-Output: Integrated JavaScript code to calculate and display average latency and accuracy, keeping track of total accuracy, total latency, and transcript count.
-Prompt: "Refine the HTML and CSS to create a visually appealing and organized layout for the real-time transcription web page."
-
-Output: Enhanced HTML and CSS for better readability, added placeholders, and improved styling for a cohesive and visually appealing design.
-Prompt: "Can you explain the unit of time in the JavaScript code for calculating transcription latency?"
-
-Output: Clarified that the unit of time is in seconds, using time.time() and explained how to convert it to milliseconds if needed.
-Prompt: "Modify the JavaScript code to restrict the accuracy to two decimal places when updating the UI."
-
-Output: Provided code to use toFixed(2) for limiting accuracy to two decimal places when updating UI elements.
-Prompt: "Help me beautify the HTML page with more CSS and various HTML tags."
-
-Output: Revised HTML and CSS for a cleaner and more organized appearance, grouping buttons, adjusting font sizes, and improving overall styling.
-Prompt: "Include average latency and accuracy functionality in the HTML and JavaScript code."
-
-Output: Integrated functionality to calculate and display average latency and accuracy in the HTML and JavaScript code, considering total transcripts and updating averages dynamically.
+### Handling Rate Limit Error
+**Prompt:** How to handle the 'RateLimitError' from the OpenAI Whisper API?
+**Output:** Advised implementing try...except blocks to catch the 'RateLimitError' and providing user feedback to check the plan and billing details.
 
 
 
+### Django Channels WebSocket Connection
+**Prompt:** How to configure WebSocket connection in Django Channels consumer?
+**Output:** Shared a general structure for connecting to Deepgram using Django Channels, including connection, disconnection, and receiving functions.
+
+### Connecting to Deepgram with Django Channels
+**Prompt:** How to connect to Deepgram using Django Channels and handle WebSocket events?
+**Output:** Presented a code snippet for connecting to Deepgram, handling CLOSE and TRANSCRIPT_RECEIVED events, and raising exceptions for connection issues.
+
+
+### Code Generation
+**Task:** Write Python code to send real-time audio transcriptions using Deepgram API through Django Channels and WebSockets. Include handling for transcript and accuracy.
+**Subtasks:**
+1. Connect to Deepgram API using provided credentials.
+2. Implement WebSocket consumer to handle real-time transcription events.
+3. Extract transcript and accuracy from received data and send them through WebSocket.
+4. Ensure proper connection handling and message reception.
 
 
 
+### Transcription Latency Calculation
+**Task:** Provide a Python function to calculate transcription latency based on Deepgram API duration field.
+**Subtasks:**
+1. Extract duration field from the transcription result.
+2. Return the duration as the transcription latency in seconds.
 
-
-
-
+### Example

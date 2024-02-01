@@ -8,7 +8,7 @@
         let transcriptCount = 0;
 
         const startStopwatch = () => {
-            const countdownInterval = setInterval(() => {
+            countdownInterval = setInterval(() => {
                 remainingTime -= 1;
                 if (remainingTime >= 0) {
                     updateStopwatch();
@@ -55,7 +55,7 @@
                     mimeType: 'audio/webm',
                 });
 
-                socket = new WebSocket(`wss://realtime-audio-transcriber-bpi3khms2-ananty1s-projects.vercel.app/listen`);
+                socket = new WebSocket('ws://localhost:8000/listen');
 
                 socket.onopen = () => {
                     document.querySelector('#status').textContent = 'Connected';

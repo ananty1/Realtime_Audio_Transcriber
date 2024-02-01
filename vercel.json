@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
       {
-        "src": "realtimeaudiotranscription/asgi.py",
+        "src": "realtimeaudiotranscription/wsgi.py",
         "use": "@vercel/python",
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
       },
@@ -21,7 +21,7 @@
       },
       {
         "src": "/(.*)",
-        "dest": "realtimeaudiotranscription/asgi.py"
+        "dest": "realtimeaudiotranscription/wsgi.py"
       }
     ]
   }

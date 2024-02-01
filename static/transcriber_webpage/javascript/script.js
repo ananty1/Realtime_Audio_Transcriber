@@ -55,7 +55,7 @@
                     mimeType: 'audio/webm',
                 });
 
-                socket = new WebSocket('ws://localhost:8000/listen');
+                socket = new WebSocket(`wss://${window.location.hostname}/listen`);
 
                 socket.onopen = () => {
                     document.querySelector('#status').textContent = 'Connected';

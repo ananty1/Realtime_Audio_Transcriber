@@ -1,7 +1,9 @@
 # Realtime_Audio_Transcriber
 
-Brief description of your Django project.
 ![](https://github.com/ananty1/Realtime_Audio_Transcriber/edit/main/media/Building%20a%20Real-Time%20Transcription%20App%20with%20Django%20and%20DeepGram.gif)
+
+Brief description of your Django project.
+
 ## Table of Contents
 
 - [Realtime\_Audio\_Transcriber](#realtime_audio_transcriber)

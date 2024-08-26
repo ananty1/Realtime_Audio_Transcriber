@@ -8,5 +8,5 @@ websocket_urlpatterns = [
 ]
 
 # # add at the last
-websocket_urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
-websocket_urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# websocket_urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+# websocket_urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

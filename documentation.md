@@ -117,5 +117,3 @@ Use JavaScript:
 **Subtasks:**
 1. Extract duration field from the transcription result.
 2. Return the duration as the transcription latency in seconds.
-
-### Example

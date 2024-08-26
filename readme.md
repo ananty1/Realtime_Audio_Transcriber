@@ -1,7 +1,7 @@
 # Realtime_Audio_Transcriber
 
 Brief description of your Django project.
-
+![](https://github.com/ananty1/Realtime_Audio_Transcriber/edit/main/media/Building%20a%20Real-Time%20Transcription%20App%20with%20Django%20and%20DeepGram.gif)
 ## Table of Contents
 
 - [Realtime\_Audio\_Transcriber](#realtime_audio_transcriber)
@@ -9,7 +9,6 @@ Brief description of your Django project.
   - [Installation](#installation)
   - [Configuration](#configuration)
   - [Development](#development)
-- [GIF](#gif)
 
 ## Installation
 
@@ -68,5 +67,3 @@ Create a .env file in the project directory.
     python -m venv venv
     source venv/bin/activate   # On Windows, use `venv\Scripts\activate`
 
-# GIF
-![](https://github.com/ananty1/Realtime_Audio_Transcriber/blob/main/media/Building%20a%20Real-Time%20Transcription%20App%20with%20Django%20and%20DeepGram.gif)
